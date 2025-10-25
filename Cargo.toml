@@ -7,6 +7,7 @@ members = [
   "engine",
   "utils",
   "types",
+  "proxy",
 ]
 
 [workspace.package]
@@ -33,6 +34,7 @@ malachitebft-eth-app    = { version = "0.0.1", path = "app" }
 malachitebft-eth-cli    = { version = "0.0.1", path = "cli" }
 malachitebft-eth-engine = { version = "0.0.1", path = "engine" }
 malachitebft-eth-types  = { version = "0.0.1", path = "types" }
+malachitebft-eth-proxy  = { version = "0.0.1", path = "proxy" }
 
 alloy-consensus        = { version = "0.11.1", default-features = false }
 alloy-rpc-types        = { version = "0.11.1", features = ["eth"], default-features = false }

@@ -163,6 +163,54 @@ believe that the system can handle much higher throughput once this issue is sol
 
 Check out the following section for reproducing these tests.
 
+## Fault Injection Proxy Tool
+
+As part of this project, we developed a fault injection proxy tool specifically designed for testing and benchmarking consensus and execution layer interactions via the Engine API. This tool allows to simulate various network conditions and Byzantine behaviors to evaluate system resilience.
+
+### Architecture and Components
+
+The proxy is implemented as a Rust crate (`malachitebft-eth-proxy`) that sits between the consensus layer (Eg. Malachite) and execution layer (Eg. Reth), intercepting and potentially modifying Engine API calls. The tool consists of several key components:
+
+- **`config.rs`**: Comprehensive configuration system supporting multiple fault scenarios, targeting specific methods or patterns, with configurable probabilities and parameters
+- **`fault_injector.rs`**: Core fault injection logic implementing probability-based fault injection with statistics tracking
+- **`middleware.rs`**: Tower-based middleware layers for different fault types (delays, drops, corruption) that can be composed together
+- **`lib.rs`**: Main proxy implementation using Axum for HTTP handling and request forwarding
+- **`main.rs`**: CLI interface with clap for easy configuration and deployment
+- **`metrics.rs`**: Prometheus-compatible metrics collection for observability
+- **`server.rs`**: Advanced server implementation with comprehensive request handling
+- **`engine_proxy.rs`**: Specialized Engine API proxy with JWT authentication support
+
+### Fault Injection Capabilities
+
+The tool supports various fault injection strategies:
+
+- **Delay Injection**: Adds artificial latency to simulate network delays
+- **Request Dropping**: Simulates packet loss by dropping requests
+- **Response Corruption**: Corrupts response data using different strategies (random bytes, bit flips, JSON manipulation)
+- **Byzantine Behaviors**: Implements specific Byzantine fault patterns relevant to blockchain systems
+- **Error Injection**: Returns custom error responses to test error handling
+
+### Usage
+
+The proxy can be configured via command line arguments or configuration files:
+
+```bash
+# Basic usage with fault injection enabled
+./malachitebft-eth-proxy --listen 127.0.0.1:8551 --target http://127.0.0.1:8550 --enable-faults
+
+# Advanced configuration with custom fault scenarios
+./malachitebft-eth-proxy --config fault_scenarios.toml
+```
+
+### Benchmarking and Observability
+
+The tool includes metrics collection compatible with Prometheus and Grafana, allowing for analysis of:
+- Request/response latencies
+- Fault injection rates and types
+- Method-specific statistics
+- Error rates and patterns
+
+
 ## Running a local testnet
 
 ### Requirements
